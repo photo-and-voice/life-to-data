@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>P-13 プロトタイプと本番の間 — 壁にぶつかったから学びが始まった — Life to Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&family=Noto+Serif+JP:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ground:#b71c1c; --practice:#1565c0; --thought:#2e7d32; --vision:#6a1b9a; --bg:#fafaf8; --text:#1a1a1a; --gray-200:#e5e5e5; --gray-500:#757575; --violet:#6a1b9a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Noto Sans JP',sans-serif; line-height:1.9; }
+  .card { max-width:720px; margin:60px auto; padding:0 24px; }
+  nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; flex-wrap:wrap; gap:8px; }
+  nav a { font-family:'DM Mono',monospace; font-size:0.7rem; color:#757575; text-decoration:none; padding:6px 14px; border:1px solid #e5e5e5; border-radius:4px; }
+  .layer-tag { display:inline-block; font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:500; letter-spacing:0.08em; color:white; background:var(--practice); padding:3px 12px; border-radius:3px; }
+  .frag-id { font-family:'DM Mono',monospace; font-size:2.4rem; font-weight:500; color:var(--practice); display:block; margin-top:24px; }
+  .card-title { font-family:'Noto Serif JP',serif; font-size:1.3rem; font-weight:700; margin:8px 0 20px; line-height:1.6; }
+  .meta { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--gray-500); margin-bottom:20px; }
+  .voice { background:#f0f4ff; border-left:3px solid var(--practice); padding:20px 24px; margin:24px 0; border-radius:0 6px 6px 0; }
+  .voice-label { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--practice); letter-spacing:0.1em; margin-bottom:6px; }
+  .voice-text { font-family:'Noto Serif JP',serif; font-size:1rem; line-height:2; color:#2a2a2a; }
+  .body-text { font-family:'Noto Sans JP',sans-serif; font-size:0.92rem; line-height:2.0; color:#333; margin:32px 0; }
+  .body-text p { margin-bottom:1.2em; }
+  .section-label { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--gray-500); letter-spacing:0.1em; margin:32px 0 12px; }
+  .related-links { display:flex; flex-wrap:wrap; gap:8px; }
+  .related-link { display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--violet); text-decoration:none; padding:6px 14px; border:1px solid var(--gray-200); border-radius:4px; transition:all 0.15s; }
+  .related-link:hover { background:var(--violet); color:white; border-color:var(--violet); }
+  .related-link .r-title { font-family:'Noto Sans JP',sans-serif; font-size:0.72rem; color:var(--gray-500); }
+  .related-link:hover .r-title { color:rgba(255,255,255,0.8); }
+  .pager { display:flex; justify-content:space-between; margin:48px 0 60px; padding-top:20px; border-top:1px solid var(--gray-200); font-family:'DM Mono',monospace; font-size:0.75rem; }
+  .pager a { color:var(--practice); text-decoration:none; }
+  .pager a:hover { text-decoration:underline; }
+  .home-link { text-align:center; margin-bottom:40px; }
+  .home-link a { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--gray-500); text-decoration:none; }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+</head>
+<body>
+<div class="card">
+  <nav>
+    <a href="index.html">← 地図に戻る</a>
+    <a href="index.html#P-13">#P-13</a>
+  </nav>
+
+  <span class="layer-tag">PRACTICE</span>
+  <span class="frag-id">P-13</span>
+  <h1 class="card-title">プロトタイプと本番の間 — 壁にぶつかったから学びが始まった</h1>
+  <div class="meta">コンテキスト：学び & 壁 ／ 生まれた場所：パートナーチャット 2代目 ／ ★新</div>
+
+  <div class="voice">
+    <div class="voice-label">核となる声</div>
+    <div class="voice-text">プロトタイプは作れた。でもそれを人に使ってもらうには、サーバー、データベース、セキュリティ、負荷という四つの工程がある。この壁にぶつかって初めて、学ぶ動機が自分の中から生まれた。そしてその学び方の中で、おしゃべりの知性に気づいた。壁は敵ではなかった。学びの入口だった</div>
+  </div>
+
+  <div class="body-text">
+    <p>HTMLファイルをダブルクリックすればブラウザで動く。検索窓も、フィルターも、リンクも動く。プロトタイプは作れた。AIとのおしゃべりで、コードを書けない自分が「動くもの」を手にした。これはG-3「30年間、試せなかったから知らなかった」の突破だった。</p>
+    <p>しかし、それを他の人に使ってもらおうとした瞬間、壁が現れた。HTMLファイルを「メールで送る」だけでは済まない。サーバーに置く必要がある。データを保存するならデータベースが要る。他人のデータを扱うならセキュリティを考えなければならない。多くの人が同時にアクセスすれば負荷が問題になる。公開、データ保存、セキュリティ、負荷。この四つの工程が、プロトタイプと本番の間に横たわっている。</p>
+    <p>以前なら、この壁は「専門家に任せる領域」として素通りしていたはずだ。でも今は違う。プロトタイプを自分の手で作った経験があるから、壁の正体が具体的に見える。何がわからないのかがわかる。わからないことがわかると、学ぶ動機が自分の中から生まれる。誰かに「勉強しなさい」と言われたのではない。作りたいものがあって、その先に壁があって、だから知りたくなった。</p>
+    <p>そしてこの学びの過程で、おしゃべりの知性に気づいた。「サーバーって何ですか」と聞いたとき、最初は安心させるような答えが返ってきた。次は正確だが冷たい答え。でもおしゃべりを重ねるうちに、自分が何を知りたいのかをAIが掴み始め、自分もAIの言葉をどう受け取ればいいかがわかってきた。壁は敵ではなかった。壁にぶつかったから学びが始まり、学びの中でおしゃべりの知性に出会った。</p>
+  </div>
+
+  <div class="section-label">RELATED FRAGMENTS</div>
+  <div class="related-links">
+    <a class="related-link" href="P-6.html">P-6 <span class="r-title">試すスパイラル</span></a><a class="related-link" href="G-3.html">G-3 <span class="r-title">30年間、試せなかったから知らなかった</span></a><a class="related-link" href="V-1.html">V-1 <span class="r-title">インタラクションディレクター</span></a><a class="related-link" href="T-13.html">T-13 <span class="r-title">おしゃべりの知性</span></a>
+  </div>
+
+  <div class="pager">
+    <div class="pager-left"><a href='P-12.html'>← P-12 入口から出口まで</a></div>
+    <div class="pager-right"><a href="P-14.html">P-14 AIとくらすの実装 →</a></div>
+  </div>
+  <div class="home-link"><a href="index.html">← Life to Data Index</a></div>
+</div>
+<script>
+(function(){
+  var path=location.pathname.split('/').pop().replace('.html','');
+  if(!path||path==='index')return;
+  var links=document.querySelectorAll('.related-link');
+  links.forEach(function(link){link.addEventListener('click',function(){var href=this.getAttribute('href')||'';var dest=href.replace('.html','');if(typeof gtag==='function'){gtag('event','finding_narrative',{'from_fragment':path,'to_fragment':dest,'event_category':'navigation','event_label':path+' → '+dest});}});});
+  var pagerLinks=document.querySelectorAll('.pager a');
+  pagerLinks.forEach(function(link){link.addEventListener('click',function(){var href=this.getAttribute('href')||'';var dest=href.replace('.html','').replace(/#.*/,'');if(typeof gtag==='function'){gtag('event','finding_narrative',{'from_fragment':path,'to_fragment':dest,'event_category':'pager','event_label':path+' → '+dest});}});});
+})();
+</script>
+</body>
+</html>

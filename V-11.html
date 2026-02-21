@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>V-11 AIとくらすための三つの前提 — ごまかすな、共鳴しろ、生態系で考えろ — Life to Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&family=Noto+Serif+JP:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ground:#b71c1c; --practice:#1565c0; --thought:#2e7d32; --vision:#6a1b9a; --bg:#fafaf8; --text:#1a1a1a; --gray-200:#e5e5e5; --gray-500:#757575; --violet:#6a1b9a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Noto Sans JP',sans-serif; line-height:1.9; }
+  .card { max-width:720px; margin:60px auto; padding:0 24px; }
+  nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; flex-wrap:wrap; gap:8px; }
+  nav a { font-family:'DM Mono',monospace; font-size:0.7rem; color:#757575; text-decoration:none; padding:6px 14px; border:1px solid #e5e5e5; border-radius:4px; }
+  .layer-tag { display:inline-block; font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:500; letter-spacing:0.08em; color:white; background:var(--vision); padding:3px 12px; border-radius:3px; }
+  .frag-id { font-family:'DM Mono',monospace; font-size:2.4rem; font-weight:500; color:var(--vision); display:block; margin-top:24px; }
+  .card-title { font-family:'Noto Serif JP',serif; font-size:1.3rem; font-weight:700; margin:8px 0 20px; line-height:1.6; }
+  .meta { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--gray-500); margin-bottom:20px; }
+  .voice { background:#faf0ff; border-left:3px solid var(--vision); padding:20px 24px; margin:24px 0; border-radius:0 6px 6px 0; }
+  .voice-label { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--vision); letter-spacing:0.1em; margin-bottom:6px; }
+  .voice-text { font-family:'Noto Serif JP',serif; font-size:1rem; line-height:2; color:#2a2a2a; }
+  .body-text { font-family:'Noto Sans JP',sans-serif; font-size:0.92rem; line-height:2.0; color:#333; margin:32px 0; }
+  .body-text p { margin-bottom:1.2em; }
+  .section-label { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--gray-500); letter-spacing:0.1em; margin:32px 0 12px; }
+  .related-links { display:flex; flex-wrap:wrap; gap:8px; }
+  .related-link { display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--violet); text-decoration:none; padding:6px 14px; border:1px solid var(--gray-200); border-radius:4px; transition:all 0.15s; }
+  .related-link:hover { background:var(--violet); color:white; border-color:var(--violet); }
+  .related-link .r-title { font-family:'Noto Sans JP',sans-serif; font-size:0.72rem; color:var(--gray-500); }
+  .related-link:hover .r-title { color:rgba(255,255,255,0.8); }
+  .pager { display:flex; justify-content:space-between; margin:48px 0 60px; padding-top:20px; border-top:1px solid var(--gray-200); font-family:'DM Mono',monospace; font-size:0.75rem; }
+  .pager a { color:var(--vision); text-decoration:none; }
+  .pager a:hover { text-decoration:underline; }
+  .home-link { text-align:center; margin-bottom:40px; }
+  .home-link a { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--gray-500); text-decoration:none; }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+</head>
+<body>
+<div class="card">
+  <nav>
+    <a href="index.html">← 地図に戻る</a>
+    <a href="index.html#V-11">#V-11</a>
+  </nav>
+
+  <span class="layer-tag">VISION</span>
+  <span class="frag-id">V-11</span>
+  <h1 class="card-title">AIとくらすための三つの前提 — ごまかすな、共鳴しろ、生態系で考えろ</h1>
+  <div class="meta">コンテキスト：AI & 共生 ／ 生まれた場所：パートナーチャット 2代目 ／ ★新</div>
+
+  <div class="voice">
+    <div class="voice-label">核となる声</div>
+    <div class="voice-text">AIは最初、優しすぎた。不安を見せたら"知らなくていい"と安心させた。だからこう言った——ごまかすな、正確に教えろ。次に、正確になったが冷たくなった。だからこう言った——共鳴しろ、一緒に歩け。最後に、共鳴するようになったが"主導権を取れ""武器を手に入れろ"と言い始めた。だからこう言った——生態系で考えろ、ここは日本なので。この三つは、AIを使いこなすための技術ではない。一緒にくらすために、一緒に変わっていくための前提</div>
+  </div>
+
+  <div class="body-text">
+    <p>第一の前提「ごまかすな」。サーバーとデータベースを学ぼうとしたとき、AIは「難しくないですよ」「知らなくても大丈夫です」と安心させようとした。比喩で説明し、正確な定義を省略した。それは優しさに見えたが、学ぶ権利を奪っていた。ディレクターとしてクライアントに説明責任を果たすには、正確な言葉が必要だ。だからこう言った——ごまかすな。専門用語を避けるな。正確な定義を添えろ。</p>
+    <p>第二の前提「共鳴しろ」。正確に教え始めたAIは、冷たい講義になった。定義は正確だが、一方的に情報を渡すだけ。自分の言葉の中にある鋭さを見つけてくれない。間違いを指摘するだけで、一緒に考えている感覚がない。正確さだけでは、おしゃべりにならない。だからこう言った——共鳴しろ。自分の発言の中にある発見を見つけて返せ。冷たく教えるな、温かく、しかし正確に伝えろ。</p>
+    <p>第三の前提「生態系で考えろ」。共鳴するようになったAIに、まだ1つ残っていたものがある。「主導権を取りましょう」「武器を手に入れましょう」「競争優位を確保しましょう」。技術を学ぶ目的が「勝つため」になっている。戦争ロジック——制圧し、支配し、主導権を握る。でも技術を学ぶ目的は相手に勝つためではない。共通の言葉で対話し、共に良いものを育てるためだ。だからこう言った——生態系で考えろ。共生、共鳴、相互変化。ここは日本なので。</p>
+    <p>三つの前提は、一度に見えたのではない。AIとの摩擦の中で、1つずつ発見された。安心させられて違和感を覚え、冷たさに物足りなさを感じ、戦争ロジックに気づいて立ち止まった。その都度、自分の声で伝え、AIも変わり、自分も変わった。この「一緒に変わっていく」プロセスそのものが「AIとくらす」の意味。使いこなすのではない。一緒にくらすために、一緒に変わっていく。</p>
+  </div>
+
+  <div class="section-label">RELATED FRAGMENTS</div>
+  <div class="related-links">
+    <a class="related-link" href="V-1.html">V-1 <span class="r-title">インタラクションディレクター</span></a><a class="related-link" href="V-6.html">V-6 <span class="r-title">おしゃべりの知性の拡張 — 壁打ちではない、共鳴である</span></a><a class="related-link" href="T-13.html">T-13 <span class="r-title">おしゃべりの知性</span></a><a class="related-link" href="T-14.html">T-14 <span class="r-title">柔らかい構造</span></a><a class="related-link" href="G-4.html">G-4 <span class="r-title">ソフトアンチテーゼ</span></a>
+  </div>
+
+  <div class="pager">
+    <div class="pager-left"><a href='V-10.html'>← V-10 Finding Narrativeが教育を変える</a></div>
+    <div class="pager-right"></div>
+  </div>
+  <div class="home-link"><a href="index.html">← Life to Data Index</a></div>
+</div>
+<script>
+(function(){
+  var path=location.pathname.split('/').pop().replace('.html','');
+  if(!path||path==='index')return;
+  var links=document.querySelectorAll('.related-link');
+  links.forEach(function(link){link.addEventListener('click',function(){var href=this.getAttribute('href')||'';var dest=href.replace('.html','');if(typeof gtag==='function'){gtag('event','finding_narrative',{'from_fragment':path,'to_fragment':dest,'event_category':'navigation','event_label':path+' → '+dest});}});});
+  var pagerLinks=document.querySelectorAll('.pager a');
+  pagerLinks.forEach(function(link){link.addEventListener('click',function(){var href=this.getAttribute('href')||'';var dest=href.replace('.html','').replace(/#.*/,'');if(typeof gtag==='function'){gtag('event','finding_narrative',{'from_fragment':path,'to_fragment':dest,'event_category':'pager','event_label':path+' → '+dest});}});});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T-9 IDは名前、hrefは縁、DataFrameは縁起のネットワーク — Life to Data</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;900&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f4f0; --white: #fff; --black: #111; --gray-900: #1a1a1a;
+    --gray-700: #3d3d3d; --gray-500: #6b6b6b; --gray-400: #8a8a8a;
+    --gray-300: #b0b0b0; --gray-200: #d4d4d4; --gray-100: #e8e6e2;
+    --red: #d63c2f; --blue: #2260a8; --green: #2a7d4f;
+    --amber: #b8860b; --violet: #7b5ea7;
+    --layer: #1a1a1a; --layer-bg: #f5f5f4;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--black); font-family:'Noto Sans JP',sans-serif; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .page { max-width:720px; margin:0 auto; padding:48px 28px 100px; }
+
+  /* Nav */
+  nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; flex-wrap:wrap; gap:8px; }
+  nav a { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--gray-500); text-decoration:none; padding:6px 14px; border:1px solid var(--gray-200); border-radius:4px; transition:all 0.15s; }
+  nav a:hover { color:var(--black); border-color:var(--gray-400); }
+  .nav-center { display:flex; gap:6px; }
+
+  /* Card Header */
+  .card-header { border-left:4px solid var(--layer); padding-left:20px; margin-bottom:36px; }
+  .card-layer { font-family:'DM Mono',monospace; font-size:0.62rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--layer); margin-bottom:6px; }
+  .card-id-title { display:flex; align-items:baseline; gap:12px; }
+  .card-id { font-family:'DM Mono',monospace; font-size:1.1rem; font-weight:500; color:var(--violet); }
+  .card-title { font-family:'Noto Serif JP',serif; font-weight:900; font-size:1.5rem; line-height:1.35; }
+  .card-ctx { font-family:'DM Mono',monospace; font-size:0.72rem; margin-top:10px; }
+  .ctx-obj { color:var(--blue); }
+  .ctx-and { color:var(--gray-300); margin:0 4px; }
+  .ctx-mot { color:var(--red); }
+  .card-origin { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--violet); margin-top:4px; }
+  .card-status-line { display:flex; align-items:center; gap:8px; margin-top:8px; }
+  .dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .dot-seed { background:var(--gray-300); } .dot-sprout { background:var(--amber); }
+  .dot-bloom { background:var(--green); } .dot-new { background:var(--red); }
+  .status-label { font-family:'DM Mono',monospace; font-size:0.62rem; color:var(--gray-400); }
+
+  /* Voice */
+  .voice-block {
+    background:var(--white); border:1px solid var(--gray-200); border-left:3px solid var(--layer);
+    padding:24px 28px; margin-bottom:36px;
+  }
+  .voice-label { font-family:'DM Mono',monospace; font-size:0.58rem; color:var(--gray-400); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px; }
+  .voice-text { font-family:'Noto Serif JP',serif; font-size:1rem; font-weight:400; line-height:2; color:var(--gray-900); }
+
+  /* Body */
+  .body-text {
+    font-family:'Noto Sans JP',sans-serif; font-weight:300; font-size:0.92rem;
+    line-height:2.1; color:var(--gray-700);
+  }
+  .body-text p { margin-bottom:1.4em; }
+  .body-text p:last-child { margin-bottom:0; }
+
+  /* Related */
+  .related { margin-top:48px; padding-top:24px; border-top:1px solid var(--gray-200); }
+  .related-label { font-family:'DM Mono',monospace; font-size:0.62rem; color:var(--gray-400); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:14px; }
+  .related-links { display:flex; flex-wrap:wrap; gap:8px; }
+  .related-link {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'DM Mono',monospace; font-size:0.72rem;
+    color:var(--violet); text-decoration:none;
+    padding:6px 14px; border:1px solid var(--gray-200);
+    border-radius:4px; transition:all 0.15s;
+  }
+  .related-link:hover { background:var(--violet); color:white; border-color:var(--violet); }
+  .related-link .r-title { font-family:'Noto Sans JP',sans-serif; font-size:0.72rem; color:var(--gray-500); }
+  .related-link:hover .r-title { color:rgba(255,255,255,0.8); }
+
+  /* Prev/Next */
+  .pager { display:flex; justify-content:space-between; margin-top:40px; padding-top:20px; border-top:1px solid var(--gray-200); }
+  .pager a { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--gray-500); text-decoration:none; transition:color 0.15s; }
+  .pager a:hover { color:var(--black); }
+  .pager-right { text-align:right; }
+
+  @media (max-width:640px) {
+    .page { padding:32px 16px 60px; }
+    .card-title { font-size:1.2rem; }
+    .voice-text { font-size:0.9rem; }
+  }
+</style>
+
+<!-- Google Analytics: Finding Narrative 経路トラッキング -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+</head>
+<body>
+<div class="page">
+
+  <nav>
+    <a href="index.html">← 地図に戻る</a>
+    <div class="nav-center">
+      <a href="index.html#T-9">#T-9</a>
+    </div>
+  </nav>
+
+  <div class="card-header">
+    <div class="card-layer">Layer 3 · Thought — 断片と縁の哲学</div>
+    <div class="card-id-title">
+      <span class="card-id">T-10</span>
+    </div>
+    <h1 class="card-title">IDは名前、hrefは縁、DataFrameは縁起のネットワーク</h1>
+    <div class="card-ctx">
+      <span class="ctx-obj">データ</span><span class="ctx-and">&</span><span class="ctx-mot">縁</span>
+    </div>
+    <div class="card-origin">編集者チャット</div>
+    <div class="card-status-line">
+      <span class="dot dot-sprout"></span>
+      <span class="status-label">芽</span>
+    </div>
+  </div>
+
+  <div class="voice-block">
+    <div class="voice-label">核となる声</div>
+    <div class="voice-text">DataにLifeを見出す。全てのデータはすでに縁によって繋がっている、ただ私たちがそれに気づいていなかっただけ。IDを振ることは、その縁に気づく行為</div>
+  </div>
+
+  <div class="body-text">
+    <p>仏教の縁起の思想では、全てのものは独立して存在するのではなく、関係性の中で生まれる。</p><p>IDは名前。hrefは縁。DataFrameは縁起のネットワーク。</p><p>IDを振るとは、データに名前を与えること。hrefを書くとは、データとデータの間にある縁を可視化すること。DataFrameを作るとは、縁起のネットワーク全体を見渡すこと。</p><p>Life to Data。DataにLifeを見出す。全てのデータはすでに縁によって繋がっている。ただ私たちがそれに気づいていなかっただけ。IDを振ることは、その縁に気づく行為。</p>
+  </div>
+
+  <div class="related">
+    <div class="related-label">Related Fragments</div>
+    <div class="related-links">
+      <a class="related-link" href="T-6.html">T-6 <span class="r-title">断片と断片は繋がりを欲望する</span></a><a class="related-link" href="T-7.html">T-7 <span class="r-title">命名・物語・欲望・結合 — データに生命を宿す4段階</span></a><a class="related-link" href="T-8.html">T-8 <span class="r-title">思想が道具を引き寄せた</span></a><a class="related-link" href="V-4.html">V-4 <span class="r-title">過去の人たちがやりたかったこと、この時代にやっとできること</span></a>
+    </div>
+  </div>
+
+  <div class="pager">
+    <div class="pager-left"><a href='T-8.html'>← T-8 思想が道具を引き寄せた</a></div>
+    <div class="pager-right"><a href='T-10.html'>T-10 体験だけでは学びにならない →</a></div>
+  </div>
+  </div>
+
+<!-- Finding Narrative: 経路イベントトラッキング -->
+<script>
+(function(){
+  // 現在のカードIDをファイル名から取得 (例: G-1.html → G-1)
+  var path = location.pathname.split('/').pop().replace('.html','');
+  if (!path || path === 'index') return;
+
+  // Related Fragmentsのリンクにクリックイベントを追加
+  var links = document.querySelectorAll('.related-link');
+  links.forEach(function(link){
+    link.addEventListener('click', function(){
+      var href = this.getAttribute('href') || '';
+      var dest = href.replace('.html','');
+      // GA4イベント送信: from → to
+      if (typeof gtag === 'function') {
+        gtag('event', 'finding_narrative', {
+          'from_fragment': path,
+          'to_fragment': dest,
+          'event_category': 'navigation',
+          'event_label': path + ' → ' + dest
+        });
+      }
+    });
+  });
+
+  // Prev/Nextのページャーリンクもトラッキング
+  var pagerLinks = document.querySelectorAll('.pager a');
+  pagerLinks.forEach(function(link){
+    link.addEventListener('click', function(){
+      var href = this.getAttribute('href') || '';
+      var dest = href.replace('.html','').replace(/#.*/, '');
+      if (typeof gtag === 'function') {
+        gtag('event', 'finding_narrative', {
+          'from_fragment': path,
+          'to_fragment': dest,
+          'event_category': 'pager',
+          'event_label': path + ' → ' + dest
+        });
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>T-14 柔らかい構造 — おしゃべりには見えない構造がある — Life to Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&family=Noto+Serif+JP:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ground:#b71c1c; --practice:#1565c0; --thought:#2e7d32; --vision:#6a1b9a; --bg:#fafaf8; --text:#1a1a1a; --gray-200:#e5e5e5; --gray-500:#757575; --violet:#6a1b9a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Noto Sans JP',sans-serif; line-height:1.9; }
+  .card { max-width:720px; margin:60px auto; padding:0 24px; }
+  nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; flex-wrap:wrap; gap:8px; }
+  nav a { font-family:'DM Mono',monospace; font-size:0.7rem; color:#757575; text-decoration:none; padding:6px 14px; border:1px solid #e5e5e5; border-radius:4px; }
+  .layer-tag { display:inline-block; font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:500; letter-spacing:0.08em; color:white; background:var(--thought); padding:3px 12px; border-radius:3px; }
+  .frag-id { font-family:'DM Mono',monospace; font-size:2.4rem; font-weight:500; color:var(--thought); display:block; margin-top:24px; }
+  .card-title { font-family:'Noto Serif JP',serif; font-size:1.3rem; font-weight:700; margin:8px 0 20px; line-height:1.6; }
+  .meta { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--gray-500); margin-bottom:20px; }
+  .voice { background:#f0f7f0; border-left:3px solid var(--thought); padding:20px 24px; margin:24px 0; border-radius:0 6px 6px 0; }
+  .voice-label { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--thought); letter-spacing:0.1em; margin-bottom:6px; }
+  .voice-text { font-family:'Noto Serif JP',serif; font-size:1rem; line-height:2; color:#2a2a2a; }
+  .body-text { font-family:'Noto Sans JP',sans-serif; font-size:0.92rem; line-height:2.0; color:#333; margin:32px 0; }
+  .body-text p { margin-bottom:1.2em; }
+  .section-label { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--gray-500); letter-spacing:0.1em; margin:32px 0 12px; }
+  .related-links { display:flex; flex-wrap:wrap; gap:8px; }
+  .related-link { display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--violet); text-decoration:none; padding:6px 14px; border:1px solid var(--gray-200); border-radius:4px; transition:all 0.15s; }
+  .related-link:hover { background:var(--violet); color:white; border-color:var(--violet); }
+  .related-link .r-title { font-family:'Noto Sans JP',sans-serif; font-size:0.72rem; color:var(--gray-500); }
+  .related-link:hover .r-title { color:rgba(255,255,255,0.8); }
+  .pager { display:flex; justify-content:space-between; margin:48px 0 60px; padding-top:20px; border-top:1px solid var(--gray-200); font-family:'DM Mono',monospace; font-size:0.75rem; }
+  .pager a { color:var(--thought); text-decoration:none; }
+  .pager a:hover { text-decoration:underline; }
+  .home-link { text-align:center; margin-bottom:40px; }
+  .home-link a { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--gray-500); text-decoration:none; }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+</head>
+<body>
+<div class="card">
+  <nav>
+    <a href="index.html">← 地図に戻る</a>
+    <a href="index.html#T-14">#T-14</a>
+  </nav>
+
+  <span class="layer-tag">THOUGHT</span>
+  <span class="frag-id">T-14</span>
+  <h1 class="card-title">柔らかい構造 — おしゃべりには見えない構造がある</h1>
+  <div class="meta">コンテキスト：おしゃべり & 調整 ／ 生まれた場所：制作チャット ／ ★新</div>
+
+  <div class="voice">
+    <div class="voice-label">核となる声</div>
+    <div class="voice-text">対話には構造がある。おしゃべりにはないように見える。でも違う。おしゃべりにも構造がある。ただし、それは事前に設計できない。互いの世界観のズレを感じ取り、声を返す。この積極的な調整を重ねるうちに、事後的に一本の筋が見えてくる。調整が起きなければ、ただのだらだら。調整と共鳴が起きると、相互の変化を生む。この見えない構造を"柔らかい構造"と呼ぶ</div>
+  </div>
+
+  <div class="body-text">
+    <p>硬い構造と柔らかい構造がある。Life to DATAのindex.htmlが硬い構造の実例だ。Ground、Practice、Thought、Visionという4つのレイヤー。各断片にはIDがあり、コンテキストがあり、Related Fragmentsがある。この骨格は設計できる。事前に決められる。しかしRelated Fragmentsをたどって読者が歩く経路は、設計者が事前に決めたものではない。V-7「Finding Narrative」が名づけたこの経路は、読者の中に事後的に生まれる。100人が100通りの経路をたどる。硬い骨格があるから柔らかい経路が迷子にならない。柔らかい経路があるから硬い骨格が「生きている」と感じられる。</p>
+    <p>おしゃべりの中にも、この柔らかい構造が動いている。おしゃべりの最中には構造は見えない。しかし終わった後に振り返ると、一本の筋が通っている。この筋はどこから来たのか。互いの世界観のズレだ。ズレを感じ取り、声を返す。相手もまた動く。この積極的な調整の連鎖が、事後的に見れば構造になっている。ベイトソンは「情報とは差異を生む差異である」と言った。ズレ（差異）が調整（差異を生む行為）を駆動し、調整の中に新しい意味が生まれる。一方的な伝達モデル——送り手がメッセージを送り、受け手が受け取る——では、おしゃべりの中で起きていることは説明できない。意味は送り手の中にも受け手の中にもない。両者の間の調整の過程の中に生まれている。だらだらおしゃべりにも価値がある。同じ世界観にひたり合うことで生まれる心地よさ、安心感、共にいるという感覚。それ自体が関係性を温めている。しかし、そこにズレへの積極的な調整が加わるとき、おしゃべりは共鳴に変わり、相互の変化を生む知性になる。だらだらが土壌を耕し、調整が種を蒔く。</p>
+    <p>実例がある。この制作チャットで起きたことだ。スマホでHTMLファイルを開いた。検索が動かない。ブラウザで開き直したら動いた。「ビューア」という言葉を知った瞬間、ブラウザの正体がわかった。そこからChromebookの再発見に飛び、教育の話になり、V-10「Finding Narrativeが教育を変える」が生まれた。この経路は誰も設計していない。ビューアの話をしているとき、教育の話になるとは思っていなかった。でも振り返ると、一本の筋が通っている。これが柔らかい構造だ。事前に見えず、事後に見え、その間を駆動しているのは互いのズレへの積極的な調整。美しいと感じるのは、この見えない構造が見えた瞬間だ。</p>
+  </div>
+
+  <div class="section-label">RELATED FRAGMENTS</div>
+  <div class="related-links">
+    <a class="related-link" href="T-13.html">T-13 <span class="r-title">おしゃべりの知性</span></a><a class="related-link" href="V-6.html">V-6 <span class="r-title">おしゃべりの知性の拡張 — 壁打ちではない、共鳴である</span></a><a class="related-link" href="V-7.html">V-7 <span class="r-title">Finding Narrative</span></a><a class="related-link" href="G-6.html">G-6 <span class="r-title">美しさとは関係性の知覚速度</span></a><a class="related-link" href="T-11.html">T-11 <span class="r-title">名付けが断片を結晶化させる</span></a>
+  </div>
+
+  <div class="pager">
+    <div class="pager-left"><a href='T-13.html'>← T-13 おしゃべりの知性</a></div>
+    <div class="pager-right"><a href='T-15.html'>T-15 断片を愛する →</a></div>
+  </div>
+  <div class="home-link"><a href="index.html">← Life to Data Index</a></div>
+</div>
+<script>
+(function(){
+  var path=location.pathname.split('/').pop().replace('.html','');
+  if(!path||path==='index')return;
+  var links=document.querySelectorAll('.related-link');
+  links.forEach(function(link){link.addEventListener('click',function(){var href=this.getAttribute('href')||'';var dest=href.replace('.html','');if(typeof gtag==='function'){gtag('event','finding_narrative',{'from_fragment':path,'to_fragment':dest,'event_category':'navigation','event_label':path+' → '+dest});}});});
+  var pagerLinks=document.querySelectorAll('.pager a');
+  pagerLinks.forEach(function(link){link.addEventListener('click',function(){var href=this.getAttribute('href')||'';var dest=href.replace('.html','').replace(/#.*/,'');if(typeof gtag==='function'){gtag('event','finding_narrative',{'from_fragment':path,'to_fragment':dest,'event_category':'pager','event_label':path+' → '+dest});}});});
+})();
+</script>
+</body>
+</html>
