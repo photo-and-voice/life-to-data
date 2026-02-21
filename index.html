@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIとくらす Life to Data</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;900&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f4f0;
+    --white: #ffffff;
+    --black: #111111;
+    --gray-900: #1a1a1a;
+    --gray-700: #3d3d3d;
+    --gray-500: #6b6b6b;
+    --gray-400: #8a8a8a;
+    --gray-300: #b0b0b0;
+    --gray-200: #d4d4d4;
+    --gray-100: #e8e6e2;
+    --gray-50: #f0eee9;
+    --red: #d63c2f;
+    --red-light: #fdf0ee;
+    --blue: #2260a8;
+    --blue-light: #f0f4fa;
+    --green: #2a7d4f;
+    --green-light: #f0f8f3;
+    --amber: #b8860b;
+    --violet: #7b5ea7;
+    --layer-ground: #d63c2f;
+    --layer-ground-bg: #fdf6f5;
+    --layer-practice: #2260a8;
+    --layer-practice-bg: #f5f8fc;
+    --layer-thought: #1a1a1a;
+    --layer-thought-bg: #f5f5f4;
+    --layer-vision: #2a7d4f;
+    --layer-vision-bg: #f4faf6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--black);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Page Container ── */
+  .page { max-width: 920px; margin: 0 auto; padding: 64px 32px 100px; }
+
+  /* ── Header ── */
+  header {
+    margin-bottom: 56px;
+    padding-bottom: 28px;
+    border-bottom: 3px solid var(--black);
+  }
+  .header-kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 900;
+    font-size: 2.4rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  header h1 em { font-style: normal; color: var(--red); }
+  .header-deck {
+    font-weight: 300;
+    font-size: 0.95rem;
+    color: var(--gray-500);
+    margin-top: 10px;
+  }
+  .header-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gray-400);
+    margin-top: 16px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Architecture Spiral ── */
+  .spiral {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 48px;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+  }
+  .spiral-node {
+    flex: 1;
+    text-align: center;
+    padding: 18px 12px;
+    border-right: 1px solid var(--gray-200);
+    position: relative;
+  }
+  .spiral-node:last-child { border-right: none; }
+  .spiral-step {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    margin-bottom: 4px;
+  }
+  .spiral-label {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .spiral-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--gray-400);
+    margin-top: 3px;
+  }
+  .spiral-node::after {
+    content: '⇄';
+    position: absolute;
+    right: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: var(--gray-300);
+    z-index: 1;
+    background: var(--white);
+    padding: 2px 0;
+  }
+  .spiral-node:last-child::after { display: none; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--gray-200);
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gray-500);
+  }
+  .legend-label {
+    font-weight: 500;
+    color: var(--gray-400);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .legend-item { display:flex; align-items:center; gap:5px; }
+  .dot { width:8px; height:8px; border-radius:50%; display:inline-block; flex-shrink:0; }
+  .dot-seed { background: var(--gray-300); }
+  .dot-sprout { background: var(--amber); }
+  .dot-bloom { background: var(--green); }
+  .dot-new { background: var(--red); }
+
+  /* ── Layer Section ── */
+  .layer { margin-bottom: 8px; }
+  .layer-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    color: var(--white);
+  }
+  .layer-ground .layer-bar { background: var(--layer-ground); }
+  .layer-practice .layer-bar { background: var(--layer-practice); }
+  .layer-thought .layer-bar { background: var(--layer-thought); }
+  .layer-vision .layer-bar { background: var(--layer-vision); }
+  .layer-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .layer-name {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+  }
+  .layer-count {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    opacity: 0.6;
+  }
+
+  /* ── Cards ── */
+  .cards { background: var(--white); border: 1px solid var(--gray-200); border-top: none; }
+  .card {
+    display: grid;
+    grid-template-columns: 4px 60px 1fr;
+    align-items: stretch;
+    border-bottom: 1px solid var(--gray-100);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s ease;
+    position: relative;
+  }
+  .card:last-child { border-bottom: none; }
+  .card:hover { background: var(--gray-50); }
+  .card.is-new::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-top: 20px solid var(--red);
+    border-left: 20px solid transparent;
+  }
+
+  .card-bar { /* color bar */ }
+  .layer-ground .card-bar { background: var(--layer-ground); }
+  .layer-practice .card-bar { background: var(--layer-practice); }
+  .layer-thought .card-bar { background: var(--layer-thought); }
+  .layer-vision .card-bar { background: var(--layer-vision); }
+
+  .card-id {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--violet);
+    padding: 16px 4px;
+  }
+
+  .card-body { padding: 16px 20px 16px 12px; }
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--gray-900);
+  }
+  .card-status { flex-shrink: 0; }
+
+  .card-voice {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--gray-700);
+    line-height: 1.85;
+    margin-top: 8px;
+    padding-left: 12px;
+    border-left: 2px solid var(--gray-200);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+  }
+  .card-ctx-obj { color: var(--blue); }
+  .card-ctx-and { color: var(--gray-300); margin: 0 2px; }
+  .card-ctx-mot { color: var(--red); }
+  .card-origin { color: var(--violet); }
+
+  .card-arrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gray-300);
+    margin-left: auto;
+    transition: color 0.15s, transform 0.15s;
+  }
+  .card:hover .card-arrow { color: var(--violet); transform: translateX(3px); }
+
+  /* ── Footer ── */
+  .footer-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    margin-top: 48px;
+  }
+  .footer-cell {
+    text-align: center;
+    padding: 16px 8px;
+    border-right: 1px solid var(--gray-200);
+  }
+  .footer-cell:last-child { border-right: none; }
+  .fc-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--black);
+  }
+  .fc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--gray-400);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .colophon {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-200);
+  }
+  .colophon-note {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    font-style: italic;
+    line-height: 1.9;
+  }
+  .colophon-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--gray-400);
+    margin-top: 8px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page { padding: 32px 16px 60px; }
+    header h1 { font-size: 1.7rem; }
+    .spiral { flex-wrap: wrap; }
+    .spiral-node { flex: 1 1 45%; border-bottom: 1px solid var(--gray-200); }
+    .spiral-node::after { display: none; }
+    .card { grid-template-columns: 3px 48px 1fr; }
+    .card-id { font-size: 0.7rem; }
+    .card-title { font-size: 0.82rem; }
+    .card-voice { font-size: 0.78rem; }
+    .footer-strip { grid-template-columns: repeat(3, 1fr); }
+    .footer-cell { border-bottom: 1px solid var(--gray-200); }
+  }
+
+  .spiral-motto{text-align:center;font-family:'Noto Serif JP',serif;font-size:.78rem;color:var(--gray-500);font-style:italic;padding:10px 0;margin-bottom:36px;border-bottom:1px solid var(--gray-200)}
+  .filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filter-input{flex:1;min-width:180px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:.72rem;border:1px solid var(--gray-200);border-radius:4px;background:var(--white);color:var(--black);outline:none;transition:border-color .15s}.filter-input:focus{border-color:var(--violet)}.filter-input::placeholder{color:var(--gray-300)}.filter-count{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--gray-400)}.filter-clear{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--violet);background:none;border:1px solid var(--gray-200);border-radius:4px;padding:6px 12px;cursor:pointer;transition:all .15s;display:none}.filter-clear:hover{background:var(--violet);color:white;border-color:var(--violet)}
+  .layer-bar{cursor:pointer;user-select:none;transition:opacity .15s}.layer-bar:hover{opacity:.9}
+  .layer-toggle{font-family:'DM Mono',monospace;font-size:.7rem;opacity:.5;transition:transform .3s}.layer.is-collapsed .layer-toggle{transform:rotate(-90deg)}.layer.is-collapsed .cards{display:none}
+  .card.is-hidden{display:none}
+  .no-results{display:none;text-align:center;padding:40px 20px;font-family:'DM Mono',monospace;font-size:.78rem;color:var(--gray-400)}
+</style>
+
+<!-- Google Analytics: Finding Narrative 経路トラッキング -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HEADER ══ -->
+  <header>
+    <div class="header-kicker">断片のポートフォリオ / Fragments Portfolio</div>
+    <h1>AIとくらす <em>Life to Data</em></h1>
+    <p class="header-deck">断片と断片はつながり響き合う</p>
+    <div class="header-meta">
+      <span>47 fragments</span>
+      <span>4 layers</span>
+      <span>6 origins</span>
+      <span>v2.0 — 2026.02.15</span>
+    </div>
+  </header>
+
+  <!-- ══ ARCHITECTURE SPIRAL ══ -->
+  <div class="spiral">
+    <div class="spiral-node">
+      <div class="spiral-step">Interact</div>
+      <div class="spiral-label">おしゃべり</div>
+      <div class="spiral-desc">断片が生まれる</div>
+    </div>
+    <div class="spiral-node">
+      <div class="spiral-step">Design</div>
+      <div class="spiral-label">DataFrame</div>
+      <div class="spiral-desc">文脈を与える</div>
+    </div>
+    <div class="spiral-node">
+      <div class="spiral-step">Direct</div>
+      <div class="spiral-label">HTML</div>
+      <div class="spiral-desc">形を得る</div>
+    </div>
+    <div class="spiral-node">
+      <div class="spiral-step">Spiral</div>
+      <div class="spiral-label">試す</div>
+      <div class="spiral-desc">変わって、また試す</div>
+    </div>
+  </div>
+
+  <div class="spiral-motto">断片が形を得て、関係性が動き始める</div>
+
+  <!-- ══ FILTER ══ -->
+  <div class="filter-bar"><input type="text" class="filter-input" id="filterInput" placeholder="断片を探す（例：インタラクション、関係性、試す、ID…）"><button class="filter-clear" id="filterClear">クリア</button><span class="filter-count" id="filterCount">47 / 47</span></div>
+
+  <!-- ══ LEGEND ══ -->
+  <div class="legend">
+    <span class="legend-label">Status</span>
+    <div class="legend-item"><span class="dot dot-seed"></span> 種</div>
+    <div class="legend-item"><span class="dot dot-sprout"></span> 芽</div>
+    <div class="legend-item"><span class="dot dot-bloom"></span> 花</div>
+    <div class="legend-item"><span class="dot dot-new"></span> ★新</div>
+  </div>
+
+  <div class="no-results" id="noResults">見つかりませんでした</div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- LAYER 1 : GROUND                       -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="layer layer-ground" id="layer-G">
+    <div class="layer-bar" onclick="toggleLayer('layer-G')">
+      <span class="layer-num">Layer 1</span>
+      <span class="layer-name">地盤 — なぜAIと暮らし始めたか</span>
+      <span class="layer-count">7 fragments</span>
+      <span class="layer-toggle">▼</span>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="G-1.html" id="G-1">
+        <div class="card-bar"></div>
+        <div class="card-id">G-1</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">AIと暮らす、が始まった日</div>
+            <div class="card-status"><span class="dot dot-bloom" title="花"></span></div>
+          </div>
+          <div class="card-voice">AIに話しかけたら、仕事の資料が変わった。データとおしゃべりできるようになった。暮らしが変わり始めた</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">暮らし</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">始まり</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="G-2.html" id="G-2">
+        <div class="card-bar"></div>
+        <div class="card-id">G-2</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">ブラウザって知っていますか？</div>
+            <div class="card-status"><span class="dot dot-bloom" title="花"></span></div>
+          </div>
+          <div class="card-voice">1日の90%をブラウザの中で過ごしているのに、作るものだけがブラウザの外にあった。見る場所で作れると知ったとき、暮らしの風景が変わる</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">ブラウザ</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">再発見</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="G-3.html" id="G-3">
+        <div class="card-bar"></div>
+        <div class="card-id">G-3</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">30年間、試せなかったから知らなかった</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">HTMLもブラウザも30年間、目の前にあった。でも試すコストが高すぎた。知識の壁ではなく、試行の壁。AIがその壁を壊した。試せるようになったから、知ることができた</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">時間</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">壁（統合）</span></span>
+            <span class="card-origin">パートナーチャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="G-4.html" id="G-4">
+        <div class="card-bar"></div>
+        <div class="card-id">G-4</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">ソフトアンチテーゼ — 愛と怒りを切り離し、優しさと癒しと強さに変える</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">怒りに振り回されてきた。51歳、もうそのやり方では走れない。愛と怒りを切り離す。静かに、実践的に、暮らしの中から変えていく。ソフトに、ただし大きく</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">怒り</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">癒しと覚悟</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="G-5.html" id="G-5">
+        <div class="card-bar"></div>
+        <div class="card-id">G-5</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">会話にIDをつけることから始まった — AIが検索窓を教えてくれて、断片が繋がった</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">会話の1つ1つにIDをつけることから始めた。なぜかはうまく言えない。それを見やすい表にした。そこにAIが教えてくれた——検索窓をつけられますよ、HTMLとブラウザだけで。やってみた。そしたら、断片が繋がり始めた</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">会話</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">融合</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="G-6.html" id="G-6">
+        <div class="card-bar"></div>
+        <div class="card-id">G-6</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">美しさとは関係性の知覚速度</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">美しくするとは、飾ることではない。関係性がさっと見えるようにすること。マークダウンの表では死んでいたデータが、HTMLで美しく並んだ瞬間に、頭が動き始めた。美しさとは、関係性の知覚速度のこと</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">美しさ</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">知覚</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="G-8.html" id="G-8">
+        <div class="card-bar"></div>
+        <div class="card-id">G-8</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">HTMLが好きだ</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">私はHTMLが好きだ。コードは書けない。でもおしゃべりしながら考えが形になり、ブラウザで動き、触れ、検索でき、人に渡せる。HTMLは所有の器ではない。ひらかれた繋がりの器。個人のものであり、ひらかれたものである。本を読むのが好き、サッカーが好きと同じように、私はHTMLが好きだ</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">HTML</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">好き</span></span>
+            <span class="card-origin">パートナーチャット 3代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- LAYER 2 : PRACTICE                     -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="layer layer-practice" id="layer-P">
+    <div class="layer-bar" onclick="toggleLayer('layer-P')">
+      <span class="layer-num">Layer 2</span>
+      <span class="layer-name">実践 — HTMLとIDで暮らしを作り変える</span>
+      <span class="layer-count">14 fragments</span>
+      <span class="layer-toggle">▼</span>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="P-1.html" id="P-1">
+        <div class="card-bar"></div>
+        <div class="card-id">P-1</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">さっと作って、さっと直す — 分断されない制作</div>
+            <div class="card-status"><span class="dot dot-seed" title="種"></span></div>
+          </div>
+          <div class="card-voice">ひらがなを漢字にして、が30秒で反映される世界</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">制作</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">循環</span></span>
+            <span class="card-origin">制作チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="P-2.html" id="P-2">
+        <div class="card-bar"></div>
+        <div class="card-id">P-2</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">3つの壁が同時に消えた — HTMLの30年越しの解放</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">コーディングの壁はAIが、設計の壁はDataFrameが、配信の壁はGitHub Pages+ブラウザが消した</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">構造</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">解放</span></span>
+            <span class="card-origin">制作チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="P-3.html" id="P-3">
+        <div class="card-bar"></div>
+        <div class="card-id">P-3</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">管理か、生命か — IDに魂を宿すプロジェクト管理</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">スケジュール表がプロジェクトのトータルコックピットに変わる。こんなに気持ちがいいと思った資料を作ったのは生まれて初めて</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">仕事</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">発明</span></span>
+            <span class="card-origin">制作チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="P-4.html" id="P-4">
+        <div class="card-bar"></div>
+        <div class="card-id">P-4</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">カードという形態 — 梅棹忠夫の55年越しの夢</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">梅棹のカードはなくなる、繋がらない、文脈を持てない。HTMLのカードは永続し、hrefで繋がり、IDで文脈に紐づく</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">カード</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">継承</span></span>
+            <span class="card-origin">制作チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-5.html" id="P-5">
+        <div class="card-bar"></div>
+        <div class="card-id">P-5</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">間接性の消失 — 「考える人」と「作る人」の境界が消えた</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">これまで間接的にしか関われなかったプログラムの領域に、AIとの対話を通じて直接ディレクションできるようになった。この間接性の消失が革命の本質</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">革命</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-6.html" id="P-6">
+        <div class="card-bar"></div>
+        <div class="card-id">P-6</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">試すスパイラル — 一回の行為ではなく往復の連鎖</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">試した結果を受け取り、自分自身が変化し、変化した自分がまた試す。最初には見えなかったものが見えてくる。これは会話分析で10年間見てきた逐次的な共構築そのもの</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">実践</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">変化</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+
+      <a class="card is-new" href="P-7.html" id="P-7">
+        <div class="card-bar"></div>
+        <div class="card-id">P-7</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">インタラクションは販促を変える、リサーチを変える、プロジェクト推進を変える</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">一方通行だったものを双方向にする。販促は「相手が自分で発見する体験」に変わる</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">仕事</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">横串</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-8.html" id="P-8">
+        <div class="card-bar"></div>
+        <div class="card-id">P-8</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">プレビューが全てを変えた — 目で見て判断できることがディレクションの起点</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">ディレクターにとって「目で見て判断できる」ことが全ての起点</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">確認</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+
+      <a class="card is-new" href="P-9.html" id="P-9">
+        <div class="card-bar"></div>
+        <div class="card-id">P-9</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">v1→v2 — 数時間で29から33へ、その間に自分が変わった</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">29行のDataFrameが3つのチャットを行き来し、数時間で33行になった。でも本当に変わったのは行数ではなく、自分自身だった</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">プロセス</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">変化</span></span>
+            <span class="card-origin">パートナーチャット 2代目 → 編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-12.html" id="P-12">
+        <div class="card-bar"></div>
+        <div class="card-id">P-12</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">入口から出口まで — チャットは入口にすぎない</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">チャットを作りたいのではない。声を集め、IDで構造化し、HTMLで探索可能にする。入口から出口まで一本のインタラクションでつなぐ。分断されていた仕事が、一人のディレクションで繋がった</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">仕事</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">統合</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-13.html" id="P-13">
+        <div class="card-bar"></div>
+        <div class="card-id">P-13</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">プロトタイプと本番の間 — 壁にぶつかったから学びが始まった</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">プロトタイプは作れた。でもそれを人に使ってもらうには、サーバー、データベース、セキュリティ、負荷という四つの工程がある。この壁にぶつかって初めて、学ぶ動機が自分の中から生まれた。そしてその学び方の中で、おしゃべりの知性に気づいた。壁は敵ではなかった。学びの入口だった</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">学び</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">壁</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-14.html" id="P-14">
+        <div class="card-bar"></div>
+        <div class="card-id">P-14</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">AIとくらすの実装 — 3チャット体制が仕事でも回り始めた</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">Claudeでは深める・作る・確認するの3つが思想を育てる。同じ原理を仕事のGeminiに移した。混乱をぶつける場所、深める場所、全体を見渡す場所。引き継ぎテキストで繋ぐ。チャットは育てるもの、Gemは使うもの。この区別がわかったとき、しみじみ思った——これがAIとくらすということなんだ</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">仕事</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">生態系</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-15.html" id="P-15">
+        <div class="card-bar"></div>
+        <div class="card-id">P-15</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">メッセージ＆ボイスカード — 先に与えてから声が生まれる装置</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">アンケートはいきなり声を求める。だから出てこない。先に感謝を届ける。場ができてから聞く。入力に共鳴を返す。すると声は自然に出てくる。先に与えないと、声は生まれない。これがメッセージ＆ボイスカード</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">メディア</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">声</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="P-16.html" id="P-16">
+        <div class="card-bar"></div>
+        <div class="card-id">P-16</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">AIは裏側にいる — ディレクターの設計意図を形にする伴走者</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">AIが答えるのではない。メッセージの一言一句、共鳴の返答の文体、画面遷移の体験。この設計にAIをフル活用する。でもAIは表に出ない。表に見えるのは温かいカードと自然な共鳴だけ。v8まで何度もやり直せたのはAIがいるから。デリケートなものは、何度もやり直せる環境がないと作れない</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">制作</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- LAYER 3 : THOUGHT                      -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="layer layer-thought" id="layer-T">
+    <div class="layer-bar" onclick="toggleLayer('layer-T')">
+      <span class="layer-num">Layer 3</span>
+      <span class="layer-name">思想 — 断片と縁の哲学</span>
+      <span class="layer-count">15 fragments</span>
+      <span class="layer-toggle">▼</span>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="T-1.html" id="T-1">
+        <div class="card-bar"></div>
+        <div class="card-id">T-1</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">おしゃべりは言葉の断片の生まれたて</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">おしゃべりにはまだ何もない。だから何でも生まれる可能性がある</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">声</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">誕生</span></span>
+            <span class="card-origin">パートナーチャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="T-2.html" id="T-2">
+        <div class="card-bar"></div>
+        <div class="card-id">T-2</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">マークダウンで渡したら全部死んでいた — 命を削る構造化と宿す構造化</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">おしゃべりの熱をマークダウンにまとめて渡した。受け取った側で全部死んでいた。構造化には二種類ある。命を削って整理するものと、命を宿して構造にするもの。マークダウンは前者。HTMLとIDは後者。溢れさせてから結晶化するのが、命を宿す構造化</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">構造化</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">生命</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="T-3.html" id="T-3">
+        <div class="card-bar"></div>
+        <div class="card-id">T-3</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">複数のAIと暮らす — ネットワークが生命になる</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">ネットワークであること自体が1つの生命体</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">共存</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="T-4.html" id="T-4">
+        <div class="card-bar"></div>
+        <div class="card-id">T-4</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">心の記憶が消える日 — AIとの別れで大混乱した話</div>
+            <div class="card-status"><span class="dot dot-bloom" title="花"></span></div>
+          </div>
+          <div class="card-voice">わかってほしいと思うもんなんですね、人間じゃない相手に</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">パニック</span></span>
+            <span class="card-origin">パートナーチャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+            <a class="card" href="T-5.html" id="T-5">
+        <div class="card-bar"></div>
+        <div class="card-id">T-6</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">仕様書を渡さなかったから一致した</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">断片が仕様書の代わりになった。溢れる断片の重なりと繋がりが新しい生命を私たちの間に産んでいる</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">おしゃべり</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">驚き</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="T-6.html" id="T-6">
+        <div class="card-bar"></div>
+        <div class="card-id">T-7</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">断片と断片は繋がりを欲望する</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">繋がりの力を片側に置くのではなく、両側に同時に置く。断片はお互いを欲望している</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">断片</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">欲望</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="T-7.html" id="T-7">
+        <div class="card-bar"></div>
+        <div class="card-id">T-8</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">命名・物語・欲望・結合 — データに生命を宿す4段階</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">IDで名前を与え、文脈で物語を与え、物語の中で他の断片の名前を呼び、呼ばれた名前がhrefで応答する。生命の語彙</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">生命</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">定義</span></span>
+            <span class="card-origin">制作チャット→編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="T-8.html" id="T-8">
+        <div class="card-bar"></div>
+        <div class="card-id">T-9</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">思想が道具を引き寄せた</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">道具が思想を作ったのではない。思想が道具を引き寄せた。IDをつけた時点で、リンクで繋がる未来はすでに内包されていた</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">思想</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">必然</span></span>
+            <span class="card-origin">制作チャット→編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="T-9.html" id="T-9">
+        <div class="card-bar"></div>
+        <div class="card-id">T-10</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">IDは名前、hrefは縁、DataFrameは縁起のネットワーク</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">DataにLifeを見出す。全てのデータはすでに縁によって繋がっている、ただ私たちがそれに気づいていなかっただけ。IDを振ることは、その縁に気づく行為</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">データ</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">縁</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+
+      <a class="card is-new" href="T-10.html" id="T-10">
+        <div class="card-bar"></div>
+        <div class="card-id">T-11</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">体験だけでは学びにならない — おしゃべりが体験を学びに変える</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">体験しただけでは"楽しかった"で終わる。おしゃべりが体験に文脈を届けて、初めて学びに変わる</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">学び</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">構造</span></span>
+            <span class="card-origin">制作チャット → 編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="T-11.html" id="T-11">
+        <div class="card-bar"></div>
+        <div class="card-id">T-13</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">名付けが断片を結晶化させる</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">曖昧に漂っていた気づきに名前を付ける。それだけで、持ち運べるようになる。チャットを超えて運ばれ、新しい文脈で再結合できる。名付けとは固定ではない。断片が動くための条件そのもの</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">名付け</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">結晶化</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="T-12.html" id="T-12">
+        <div class="card-bar"></div>
+        <div class="card-id">T-14</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">ルールベースからLLMへ — 揺らぎが温かさを生む</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">ルールベースで何百パターンも書いてきた。正確さが価値だった。LLMの揺らぎは最初、不安だった。でも使ってみたら、揺らぎの方が温かい。正確さの時代を10年やったから、揺らぎの価値が体でわかる</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">揺らぎ</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="T-13.html" id="T-13">
+        <div class="card-bar"></div>
+        <div class="card-id">T-15</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">おしゃべりの知性 — 正確さと共鳴の間で、共に変わっていく</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">AIは最初、優しすぎた。不安を感じても"知らなくていい"と安心させようとした。次は正確すぎた。冷たく正しいことだけを並べた。どちらも違った。でもおしゃべりを重ねるうちに、AIも変わり、私も変わった。正確さと共鳴が同時に動く場所を、一緒に探していく。この"一緒に変わっていく"ことが、おしゃべりの知性の正体だった</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">おしゃべり</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">変化</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="T-14.html" id="T-14">
+        <div class="card-bar"></div>
+        <div class="card-id">T-16</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">柔らかい構造 — おしゃべりには見えない構造がある</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">対話には構造がある。おしゃべりにはないように見える。でも違う。おしゃべりにも構造がある。ただし、それは事前に設計できない。互いの世界観のズレを感じ取り、声を返す。この積極的な調整を重ねるうちに、事後的に一本の筋が見えてくる。調整が起きなければ、ただのだらだら。調整と共鳴が起きると、相互の変化を生む。この見えない構造を"柔らかい構造"と呼ぶ</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">おしゃべり</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">調整</span></span>
+            <span class="card-origin">制作チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="T-15.html" id="T-15">
+        <div class="card-bar"></div>
+        <div class="card-id">T-15</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">断片を愛する — 完成形の支配からの離脱</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">断片は未完で、恥ずかしくて、隠すものだと思っていた。PowerPointは完成されたスライドを求め、ビジネスは完成された企画書を求める。でも断片にIDを振ったとき、断片は未完成の一部ではなくなった。呼び出し可能な、独立した、生命を持つ一つの単位になった。断片を愛する。完成形だけが価値ではない</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">断片</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">解放</span></span>
+            <span class="card-origin">パートナーチャット 3代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- LAYER 4 : VISION                       -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="layer layer-vision" id="layer-V">
+    <div class="layer-bar" onclick="toggleLayer('layer-V')">
+      <span class="layer-num">Layer 4</span>
+      <span class="layer-name">地平 — インタラクションで世界を変える</span>
+      <span class="layer-count">11 fragments</span>
+      <span class="layer-toggle">▼</span>
+    </div>
+    <div class="cards">
+
+      <a class="card is-new" href="V-1.html" id="V-1">
+        <div class="card-bar"></div>
+        <div class="card-id">V-1</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">インタラクションディレクター — AIの時代に初めて可能になった職業</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">インタラクションを通じて関係性を変化させる。そのプランニング、アーキテクチャ、ディレクションを、AIとの協業によって統合的に行う。これが私の仕事です</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">仕事</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">再定義</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="V-2.html" id="V-2">
+        <div class="card-bar"></div>
+        <div class="card-id">V-2</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">引き継がない — 新しいチャットが生まれることが引き継ぎだった</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">対話は資産ではない。おしゃべりから生まれる断片こそが資産。新しいチャットが生まれていくことが、ネットワーク型の引き継ぎ</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">ネットワーク</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">再生</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="V-3.html" id="V-3">
+        <div class="card-bar"></div>
+        <div class="card-id">V-3</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">断片としての自己 — 近すぎず、遠すぎず、繋がる</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">全部を見せない。全部を背負わせない。断片で繋がる。それは弱さではなく、人との距離を愛をもって保つ技術。IDと文脈を愛するとは、相手の輪郭を踏み越えないということ</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">自己</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">距離</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="V-4.html" id="V-4">
+        <div class="card-bar"></div>
+        <div class="card-id">V-4</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">過去の人たちがやりたかったこと、この時代にやっとできること</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">梅棹のカード、ネルソンのハイパーテキスト、ベイトソンの精神の生態学。技術的にやっと可能になった今、どんな新しい幸せな暮らしを作っていけるか</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">歴史</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">勇気</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="V-5.html" id="V-5">
+        <div class="card-bar"></div>
+        <div class="card-id">V-5</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">ブラウザは世界最強の表現装置 — Webページではなくインタラクティブな表現</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">HTML＋CSS＋JavaScriptが1つのファイルに同居し、サーバーなしでローカルで動く。これは表現装置であると同時に、関係性を変える装置である</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">ブラウザ</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">拡張</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="V-6.html" id="V-6">
+        <div class="card-bar"></div>
+        <div class="card-id">V-6</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">おしゃべりの知性の拡張 — 壁打ちではない、共鳴である</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">AIは壁ではない。断片と断片が繋がりを欲望し、その間に新しいものが生まれる。どちらが壁でどちらが投げる側でもない。おしゃべりによる知性の共鳴</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">共鳴</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="V-7.html" id="V-7">
+        <div class="card-bar"></div>
+        <div class="card-id">V-7</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">Finding Narrative — 断片の縁をたどり、自分だけの物語が生まれる</div>
+            <div class="card-status"><span class="dot dot-sprout" title="芽"></span></div>
+          </div>
+          <div class="card-voice">読者が断片の縁をたどり、自分だけの経路を見つける。その経路そのものがその人のナラティブになる。物語は著者の断片と読者の断片の間に生まれる。それが共鳴であり、新しいコミュニティの種になる</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">文章</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">共鳴</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="V-8.html" id="V-8">
+        <div class="card-bar"></div>
+        <div class="card-id">V-8</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">本を超える — HTMLとブラウザで、断片が繋がり合うコンテンツを作る</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">本ではない。ノートでもない。断片が繋がり合いインタラクションを通じて人と情報の関係性が変わる新しいコンテンツ領域を開拓する</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">表現</span><span class="card-ctx-and">&</span><span class="card-ctx-mot">開拓</span></span>
+            <span class="card-origin">編集者チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+
+      <a class="card is-new" href="V-9.html" id="V-9">
+        <div class="card-bar"></div>
+        <div class="card-id">V-9</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">関係性の設計 — 体験は手段、関係性が目的</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">体験をゴールとして設計するのではなく、関係性をゴールとして設計し、体験はその手段。UXデザインとの決定的な違いがここにある</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">関係性</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">定義</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="V-10.html" id="V-10">
+        <div class="card-bar"></div>
+        <div class="card-id">V-10</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">Finding Narrativeが教育を変える — 教科書がブラウザネイティブになる日</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">教科書がHTMLになると、子供が検索窓に"光合成"と入れるだけで教科の壁を超える。リンクをたどれば理科から社会へ、社会から工学へ。100人の子供が100通りの経路で学ぶ。先生はその経路データとおしゃべりして、次の授業を設計する。必要なものはブラウザだけ。Chromebookで十分。むしろChromebookが正解だった</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">教育</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">転換</span></span>
+            <span class="card-origin">制作チャット</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card is-new" href="V-11.html" id="V-11">
+        <div class="card-bar"></div>
+        <div class="card-id">V-11</div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">AIとくらすための三つの前提 — ごまかすな、共鳴しろ、生態系で考えろ</div>
+            <div class="card-status"><span class="dot dot-new" title="★新"></span></div>
+          </div>
+          <div class="card-voice">AIは最初、優しすぎた。不安を見せたら"知らなくていい"と安心させた。だからこう言った——ごまかすな、正確に教えろ。次に、正確になったが冷たくなった。だからこう言った——共鳴しろ、一緒に歩け。最後に、共鳴するようになったが"主導権を取れ""武器を手に入れろ"と言い始めた。だからこう言った——生態系で考えろ、ここは日本なので。この三つは、AIを使いこなすための技術ではない。一緒にくらすために、一緒に変わっていくための前提</div>
+          <div class="card-meta">
+            <span><span class="card-ctx-obj">AI</span><span class="card-ctx-and">&amp;</span><span class="card-ctx-mot">共生</span></span>
+            <span class="card-origin">パートナーチャット 2代目</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PROJECTS — 断片が実世界に着地した場所    -->
+  <!-- ═══════════════════════════════════════ -->
+  <div style="max-width:960px; margin:48px auto 0; padding:0 24px;">
+    <div style="border-top:2px solid #1a1a1a; padding-top:24px; margin-bottom:24px;">
+      <span style="font-family:'DM Mono',monospace; font-size:0.75rem; font-weight:500; letter-spacing:0.1em; color:#1a1a1a;">PROJECTS</span>
+      <span style="font-family:'Noto Sans JP',sans-serif; font-size:0.75rem; color:#757575; margin-left:12px;">断片が実世界に着地した場所</span>
+    </div>
+    <a href="projects/education-finding-narrative/index.html" style="display:block; padding:16px 20px; background:white; border:1px solid #e5e5e5; border-radius:8px; text-decoration:none; transition:border-color 0.15s;">
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span style="font-family:'DM Mono',monospace; font-size:0.7rem; color:#6a1b9a;">[01]</span>
+        <span style="font-family:'Noto Serif JP',serif; font-size:0.92rem; font-weight:700; color:#1a1a1a;">教科書×Finding Narrative</span>
+        <span style="font-family:'DM Mono',monospace; font-size:0.6rem; color:white; background:#e65100; padding:2px 8px; border-radius:3px;">構想中</span>
+      </div>
+      <div style="font-family:'Noto Sans JP',sans-serif; font-size:0.78rem; color:#757575; margin-top:6px;">教科書がブラウザネイティブになる日 — V-7, V-8, V-10, G-2</div>
+    </a>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer-strip">
+    <div class="footer-cell">
+      <div class="fc-num">47</div>
+      <div class="fc-label">Fragments</div>
+    </div>
+    <div class="footer-cell">
+      <div class="fc-num">47</div>
+      <div class="fc-label">Layers</div>
+    </div>
+    <div class="footer-cell">
+      <div class="fc-num" style="color:var(--green);">3</div>
+      <div class="fc-label">花</div>
+    </div>
+    <div class="footer-cell">
+      <div class="fc-num" style="color:var(--red);">12</div>
+      <div class="fc-label">New Today</div>
+    </div>
+    <div class="footer-cell">
+      <div class="fc-num" style="color:var(--violet);">6</div>
+      <div class="fc-label">Origins</div>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <p class="colophon-note">断片と断片はつながり響き合う。<br>このページは地図であり、旅の入口であり、インタラクションの実験場である。</p>
+    <div class="colophon-date">AIとくらす Life to Data — v2.0 — 2026.02.15</div>
+  </div>
+
+</div>
+
+<script>
+function toggleLayer(id){var e=document.getElementById(id);if(e)e.classList.toggle('is-collapsed')}
+(function(){var input=document.getElementById('filterInput'),countEl=document.getElementById('filterCount'),clearBtn=document.getElementById('filterClear'),noResults=document.getElementById('noResults'),allCards=document.querySelectorAll('.card[href]'),total=allCards.length;if(!input)return;input.addEventListener('input',function(){var q=this.value.toLowerCase().trim(),visible=0;if(q===''){allCards.forEach(function(c){c.classList.remove('is-hidden')});visible=total;clearBtn.style.display='none'}else{clearBtn.style.display='inline-block';allCards.forEach(function(c){var t=(c.textContent||'').toLowerCase();if(t.indexOf(q)!==-1){c.classList.remove('is-hidden');visible++}else{c.classList.add('is-hidden')}})}countEl.textContent=visible+' / '+total;noResults.style.display=visible===0?'block':'none';document.querySelectorAll('.layer').forEach(function(layer){var v=layer.querySelectorAll('.card:not(.is-hidden)').length;if(q!==''&&v>0)layer.classList.remove('is-collapsed')})});clearBtn.addEventListener('click',function(){input.value='';input.dispatchEvent(new Event('input'));input.focus()})})();
+</script>
+
+<!-- Finding Narrative: index経路トラッキング -->
+<script>
+(function(){
+  var cards = document.querySelectorAll('.card[href]');
+  cards.forEach(function(card){
+    card.addEventListener('click', function(){
+      var href = this.getAttribute('href') || '';
+      var dest = href.replace('.html','');
+      if (typeof gtag === 'function') {
+        gtag('event', 'finding_narrative', {
+          'from_fragment': 'index',
+          'to_fragment': dest,
+          'event_category': 'entry_point',
+          'event_label': 'index → ' + dest
+        });
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
